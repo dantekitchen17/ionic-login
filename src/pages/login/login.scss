@@ -1,3 +1,19 @@
 page-login {
+    .head {
+        width: 100%;
+        height: 15em;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: #FBE700;
+    }
 
+    .ion-list {
+        margin-top: 15em;
+    }
+
+    .btn-login {
+        margin-top: 50px !important;
+        background-color: black !important;
+    }
 }

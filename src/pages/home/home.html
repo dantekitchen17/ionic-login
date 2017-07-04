@@ -7,12 +7,21 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Home</ion-title>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>List Kiriman</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-
+  <ion-list>
+    <ion-item *ngFor="let item of items" (click)="itemClick($event, item);">
+      <h2>{{ item.shipment_title }}</h2>
+      <h3>{{ item.location_from_city }} to {{ item.location_to_city }}</h3>
+      <h3 class="time">18:13</h3>
+    </ion-item>
+  </ion-list>
 </ion-content>
