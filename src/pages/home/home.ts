@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, MenuController, PopoverController } from 'ionic-angular';
 import { DetailPage } from '../detail/detail';
+import { PopoverPage } from '../popover/popover';
 import { DriverServiceProvider } from '../../providers/driver-service/driver-service'
 
 /**
@@ -20,7 +21,7 @@ export class HomePage {
   driver_id: number;
   items: Array<{id: number, shipment_title: string, location_from_city: string, location_to_city: string}>;
 
-  constructor(public navCtrl: NavController, public menu: MenuController, public navParams: NavParams, public driverService: DriverServiceProvider) {
+  constructor(public navCtrl: NavController, public menu: MenuController, public navParams: NavParams, public popoverCtrl: PopoverController, public driverService: DriverServiceProvider) {
     this.menu.enable(true);
     this.driver_id = 6;
   }
@@ -33,6 +34,13 @@ export class HomePage {
       {id: 2, shipment_title: "kitchen furniture", location_from_city: "Surabaya", location_to_city: "Malang"},
       {id: 3, shipment_title: "Bedroom Set", location_from_city: "Jakarta", location_to_city: "Bali"}
     ];
+  }
+
+  presentPopover(ev) {
+    let popover = this.popoverCtrl.create(PopoverPage);
+    popover.present({
+      ev: ev
+    });
   }
 
   loadItems() {

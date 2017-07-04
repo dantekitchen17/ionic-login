@@ -9,6 +9,7 @@ import { MyApp } from './app.component';
 import { LoginPage } from '../pages/login/login'
 import { HomePage } from '../pages/home/home';
 import { DetailPage } from '../pages/detail/detail';
+import { PopoverPage } from '../pages/popover/popover';
 import { DriverServiceProvider } from '../providers/driver-service/driver-service';
 
 @NgModule({
@@ -16,7 +17,8 @@ import { DriverServiceProvider } from '../providers/driver-service/driver-servic
     MyApp,
     LoginPage,
     HomePage,
-    DetailPage
+    DetailPage,
+    PopoverPage
   ],
   imports: [
     BrowserModule,
@@ -28,7 +30,8 @@ import { DriverServiceProvider } from '../providers/driver-service/driver-servic
     MyApp,
     LoginPage,
     HomePage,
-    DetailPage
+    DetailPage,
+    PopoverPage
   ],
   providers: [
     StatusBar,
