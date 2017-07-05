@@ -14,6 +14,8 @@ import { PopoverPage } from '../pages/popover/popover';
 import { DriverServiceProvider } from '../providers/driver-service/driver-service';
 import { ShipmentServiceProvider } from '../providers/shipment-service/shipment-service';
 
+import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions, Marker } from '@ionic-native/google-maps';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -41,7 +43,8 @@ import { ShipmentServiceProvider } from '../providers/shipment-service/shipment-
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     DriverServiceProvider,
-    ShipmentServiceProvider
+    ShipmentServiceProvider,
+    GoogleMaps
   ]
 })
 export class AppModule {}
