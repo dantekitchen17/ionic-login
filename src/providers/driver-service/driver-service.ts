@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { Storage } from '@ionic/storage';
 import 'rxjs/add/operator/map';
 
 /*
@@ -10,25 +11,31 @@ import 'rxjs/add/operator/map';
 */
 @Injectable()
 export class DriverServiceProvider {
+  id: number;
   data: any;
 
-  constructor(public http: Http) {
+  constructor(public http: Http, public storage: Storage) {
     this.data = null;
+    storage.get("driver_id").then((value) => {
+      this.id = value;
+    });
   }
 
-  load() {
-    if (this.data) {
-      return Promise.resolve(this.data);
+  load(reload = false) {
+    if (!reload) {
+      if (this.data) {
+        return Promise.resolve(this.data);
+      }
     }
 
     return new Promise(resolve => {
-      this.http.get('http://127.0.0.1/yukirim/api/driver/6')
+      this.http.get('https://dantekitchen17.000webhostapp.com/api/driver/' + this.id)
         .map(res => res.json())
         .subscribe(data => {
-          this.data = data.results;
+          this.data = data;
           resolve(this.data);
         }, (err) => {
-          console.log(err);
+          alert(err);
         });
     });
   }

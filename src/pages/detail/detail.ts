@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { ShipmentServiceProvider } from '../../providers/shipment-service/shipment-service';
 
 /**
  * Generated class for the DetailPage page.
@@ -17,9 +18,6 @@ export class DetailPage {
   detail: {
     nama: string,
     keterangan: string,
-    pelanggan: string,
-    tanggal_buat: string,
-    perubahan_terakhir: string,
     berakhir: string,
     cara_pesan: string,
     lokasi_asal: string,
@@ -27,24 +25,32 @@ export class DetailPage {
   };
   nama: string;
   keterangan: string;
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.id = navParams.get("item").id;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public shipmentService: ShipmentServiceProvider) {
+    var item = navParams.get("item");
+    this.id = item.id;
     this.detail = {
-      nama: "Furniture",
-      keterangan: "ini adalah sembako yang akan dikirimkan ke beberapa tempat",
-      pelanggan: "christian123",
-      tanggal_buat: "2017-04-18 15:18:35",
-      perubahan_terakhir: "2017-05-23 10:52:28",
-      berakhir: "2017-06-08 07:27:27",
-      cara_pesan: "Penawaran",
-      lokasi_asal: "STTS, Baratajaya, Surabaya City, East Java, Indonesia",
-      lokasi_tujuan: "Jl. Raya Lebani 100, Gresik"
+      nama: item.shipment_title,
+      keterangan: item.shipment_information,
+      berakhir: item.shipment_end_date,
+      cara_pesan: item.order_type,
+      lokasi_asal: item.location_from_address,
+      lokasi_tujuan: item.location_to_address
     };
     
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad DetailPage');
+  }
+
+  loadItem() {
+    this.shipmentService.load(this.id)
+      .then(data => {
+        var iLength = data.length;
+        for (var i = 0; i < iLength; i++) {
+          
+        }
+      });
   }
 
 }

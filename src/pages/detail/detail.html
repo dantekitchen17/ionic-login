@@ -12,10 +12,27 @@
 </ion-header>
 
 <ion-content padding>
-  <h6>Nama Kiriman : <span class="value">{{ detail.nama }}</span></h6>
-  <h6>Keterangan : <span class="value">{{ detail.keterangan }}</span> </h6>
-  <h6>Asal : <span class="value">{{ detail.lokasi_asal }}</span> </h6>
-  <h6>Tujuan : <span class="value">{{ detail.lokasi_tujuan }}</span> </h6>
-  <h6>Pelanggan : <span class="value">{{ detail.pelanggan }}</span> </h6>
-  <h6>Berakhir : <span class="value">{{ detail.berakhir }}</span> </h6>
+  <h6 class="text" margin-top>Nama Kiriman : <span class="value">{{ detail.nama }}</span></h6>
+  <h6 class="text">Keterangan : <span class="value">{{ detail.keterangan }}</span> </h6>
+  <h6 class="text">Asal : <span class="value">{{ detail.lokasi_asal }}</span> </h6>
+  <h6 class="text">Tujuan : <span class="value">{{ detail.lokasi_tujuan }}</span> </h6>
+  <h6 class="text">Barang yang dikirim</h6>
+  <div>
+    <ion-list class="list-barang">
+      <ion-item>
+        <h6 class="text" text-wrap>Nama Barang : <span class="value">Kursi asdasdasdasasdsad sadas sadd sa dsa dsa</span></h6>
+        <h6 class="text" text-wrap>Detail : <span class="value">Kursi ini terbuat dari kayu jati</span></h6>
+        <h6 class="text" text-wrap>Dimensi : <span class="value">10 cm x 20 cm x 30 cm</span></h6>
+        <h6 class="text" text-wrap>Total Kubikasi : <span class="value">6000 cm3</span></h6>
+        <h6 class="text" text-wrap>Berat : <span class="value">10 kg</span></h6>
+      </ion-item>
+      <ion-item>
+        <h6 class="text">Nama Barang : <span class="value">Kursi</span></h6>
+        <h6 class="text">Detail : <span class="value">Kursi ini terbuat dari kayu jati</span></h6>
+        <h6 class="text">Dimensi : <span class="value">10 cm x 20 cm x 30 cm</span></h6>
+        <h6 class="text">Total Kubikasi : <span class="value">6000 cm3</span></h6>
+        <h6 class="text">Berat : <span class="value">10 kg</span></h6>
+      </ion-item>
+    </ion-list>
+  </div>
 </ion-content>

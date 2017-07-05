@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 import { HomePage } from '../home/home'
 
 /**
@@ -14,8 +15,14 @@ import { HomePage } from '../home/home'
   templateUrl: 'login.html',
 })
 export class LoginPage {
-  constructor(public navCtrl: NavController, public menu: MenuController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public menu: MenuController, public navParams: NavParams, public storage: Storage) {
     this.menu.enable(false);
+
+    storage.get("isLoggedIn").then((val) => {
+      if (val != null) {
+        this.navCtrl.setRoot(HomePage);
+      }
+    });
   }
 
   ionViewDidLoad() {
@@ -23,6 +30,9 @@ export class LoginPage {
   }
 
   doLogin() {
+    this.storage.set("isLoggedIn", true);
+    this.storage.set("driver_id", 6);
+
     this.navCtrl.setRoot(HomePage);
   }
 }

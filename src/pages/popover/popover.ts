@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, ViewController, NavController } from 'ionic-angular';
+import { IonicPage, ViewController, App } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 import { LoginPage } from '../login/login';
-
 /**
  * Generated class for the PopoverPage page.
  *
@@ -19,17 +19,17 @@ export class PopoverPage {
     text: string
   }>;
 
-  constructor(public viewCtrl: ViewController, public nav: NavController) {
+  constructor(public viewCtrl: ViewController, public appCtrl: App, public storage: Storage) {
     this.items = [
       {name: "logout", text: "Logout"}
     ];
   }
 
-  close($ev, item) {
+  close() {
     this.viewCtrl.dismiss();
-    if (item.name == "logout") {
-      this.nav.setRoot(LoginPage);
-    }
+    this.storage.remove("isLoggedIn");
+    this.storage.remove("driver_id");
+    this.appCtrl.getRootNav().setRoot(LoginPage);
   }
 
 }

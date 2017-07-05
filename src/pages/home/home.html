@@ -20,10 +20,14 @@
 
 
 <ion-content padding>
+  <ion-refresher (ionRefresh)="refreshData($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-list>
     <ion-item *ngFor="let item of items" (click)="itemClick($event, item);">
       <h2>{{ item.shipment_title }}</h2>
-      <h3>{{ item.location_from_city }} to {{ item.location_to_city }}</h3>
+      <h3 text-wrap margin-top>Asal : <span class="value">{{ item.location_from_address }}</span></h3>
+      <h3 text-wrap margin-top>Tujuan : <span class="value">{{ item.location_to_address }}</span></h3>
       <h3 class="time">18:13</h3>
     </ion-item>
   </ion-list>

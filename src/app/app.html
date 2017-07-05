@@ -1,4 +1,4 @@
-<ion-menu [content]="content" *ngIf="1==1">
+<ion-menu [content]="content" drag-content="false">
     <ion-header>
         <ion-toolbar>
             <ion-title>Menu</ion-title>
@@ -13,4 +13,4 @@
     </ion-content>
 </ion-menu>
 
-<ion-nav [root]="rootPage" #content></ion-nav>
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
