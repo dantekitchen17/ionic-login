@@ -22,7 +22,7 @@
       <ion-item *ngFor="let item of items">
         <h6 class="text" text-wrap>Nama Barang : <span class="value">{{ item.item_name }}</span></h6>
         <h6 class="text" text-wrap>Detail : <span class="value">{{ item.item_desc }}</span></h6>
-        <h6 class="text" text-wrap>Dimensi : <span class="value">{{ item.item_length }}</span></h6>
+        <h6 class="text" text-wrap>Dimensi : <span class="value">{{ item.item_length }} {{ item.item_dimension_unit }} x {{ item.item_width }} {{ item.item_dimension_unit }} x {{ item.item_height }}  {{ item.item_dimension_unit }} </span></h6>
         <h6 class="text" text-wrap>Total Kubikasi : <span class="value">{{ item.item_kubikasi }} {{ item.item_kubikasi_unit }}</span></h6>
         <h6 class="text" text-wrap>Berat : <span class="value">10 kg</span></h6>
       </ion-item>

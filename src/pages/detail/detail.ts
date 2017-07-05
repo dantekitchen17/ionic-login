@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
 import { ShipmentServiceProvider } from '../../providers/shipment-service/shipment-service';
-import { GoogleMaps, GoogleMap, GoogleMapsEvent } from '@ionic-native/google-maps';
+import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng } from '@ionic-native/google-maps';
 
 /**
  * Generated class for the DetailPage page.
@@ -15,6 +15,8 @@ import { GoogleMaps, GoogleMap, GoogleMapsEvent } from '@ionic-native/google-map
   templateUrl: 'detail.html',
 })
 export class DetailPage {
+  @ViewChild("map") mapElement: ElementRef;
+
   id: number;
   detail: {
     nama: string,
@@ -69,6 +71,9 @@ export class DetailPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad DetailPage');
+  }
+
+  ngAfterViewInit() {
     this.loadMap();
   }
 
@@ -97,10 +102,10 @@ export class DetailPage {
 
   loadMap() {
     let element: HTMLElement = document.getElementById("map");
-    let map: GoogleMap = this.googleMaps.create(element);
-    alert(map);
-    map.one(GoogleMapsEvent.MAP_READY).then(() => {
-      
+    this.map = this.googleMaps.create(element);
+
+    this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
+      alert("map shown (supposed)");
     });
   }
 
