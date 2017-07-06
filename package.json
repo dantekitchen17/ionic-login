@@ -46,8 +46,8 @@
       "cordova-plugin-whitelist": {},
       "cordova-sqlite-storage": {},
       "cordova-plugin-googlemaps": {
-        "API_KEY_FOR_ANDROID": "AIzaSyDkU_p3FLiqO24F6y61IaAiZ8mv22ljeMk",
-        "API_KEY_FOR_IOS": "AIzaSyDkU_p3FLiqO24F6y61IaAiZ8mv22ljeMk"
+        "API_KEY_FOR_ANDROID": "AIzaSyC4UMvdz8GABGCMzAH8nwsEQh5tBcMbS5Q",
+        "API_KEY_FOR_IOS": "AIzaSyDJ3jY1XsXR1YBNZl_XEZEbC2aI8EAoKVo"
       }
     }
   }

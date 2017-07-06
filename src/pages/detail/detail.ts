@@ -1,8 +1,8 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
 import { ShipmentServiceProvider } from '../../providers/shipment-service/shipment-service';
-import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng } from '@ionic-native/google-maps';
 
+declare var google;
 /**
  * Generated class for the DetailPage page.
  *
@@ -15,8 +15,6 @@ import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng } from '@ionic-native/go
   templateUrl: 'detail.html',
 })
 export class DetailPage {
-  @ViewChild("map") mapElement: ElementRef;
-
   id: number;
   detail: {
     nama: string,
@@ -43,11 +41,13 @@ export class DetailPage {
 
   map: any;
   marker: any;
-  lat: any;
-  lng: any;
+  location_from_lat: any;
+  location_from_lng: any;
+  location_to_lat: any;
+  location_to_lng: any;
   center_from: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public shipmentService: ShipmentServiceProvider, public menu: MenuController, private googleMaps: GoogleMaps) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public shipmentService: ShipmentServiceProvider, public menu: MenuController) {
     this.items = [];
     this.menu.swipeEnable(false);
 
@@ -62,18 +62,16 @@ export class DetailPage {
       lokasi_tujuan: item.location_to_address
     };
 
-    this.lat = item.location_from_lat;
-    this.lng = item.location_from_lng;
-    this.center_from = {lat: this.lat, lng: this.lng};
+    this.location_from_lat = item.location_from_lat;
+    this.location_from_lng = item.location_from_lng;
+    this.location_to_lat = item.location_to_lat;
+    this.location_to_lng = item.location_to_lng;
     
     this.loadItem();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad DetailPage');
-  }
-
-  ngAfterViewInit() {
     this.loadMap();
   }
 
@@ -100,13 +98,34 @@ export class DetailPage {
       });
   }
 
-  loadMap() {
-    let element: HTMLElement = document.getElementById("map");
-    this.map = this.googleMaps.create(element);
-
-    this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
-      alert("map shown (supposed)");
-    });
+  mapsOnClick() {
+    window.open('https://www.google.com/maps/dir/' + this.location_from_lat + ',' + this.location_from_lng + "/" + this.location_to_lat + "," + this.location_to_lng, '_system');
   }
 
+  loadMap() {
+    
+    var coor = {lat: -25.363, lng: 131.044};
+    this.map = new google.maps.Map(document.getElementById("map"), {
+      disableDefaultUI: true
+    });
+
+    var directionsService = new google.maps.DirectionsService;
+    var directionsDisplay = new google.maps.DirectionsRenderer;
+    directionsDisplay.setMap(this.map);
+    this.calculateAndDisplayRoute(directionsService, directionsDisplay);
+  }
+
+  calculateAndDisplayRoute(directionsService, directionsDisplay) {
+    directionsService.route({
+      origin: new google.maps.LatLng(this.location_from_lat, this.location_from_lng),
+      destination: new google.maps.LatLng(this.location_to_lat, this.location_to_lng),
+      travelMode: "DRIVING"
+    }, function(response, status) {
+      if (status === "OK") {
+        directionsDisplay.setDirections(response);
+      } else {
+        alert(status);
+      }
+    });
+  }
 }

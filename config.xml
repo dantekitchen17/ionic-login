@@ -86,7 +86,7 @@
     <plugin name="cordova-plugin-whitelist" spec="^1.3.1" />
     <plugin name="cordova-sqlite-storage" spec="^2.0.4" />
     <plugin name="cordova-plugin-googlemaps" spec="^1.4.1">
-        <variable name="API_KEY_FOR_ANDROID" value="AIzaSyDkU_p3FLiqO24F6y61IaAiZ8mv22ljeMk" />
-        <variable name="API_KEY_FOR_IOS" value="AIzaSyDkU_p3FLiqO24F6y61IaAiZ8mv22ljeMk" />
+        <variable name="API_KEY_FOR_ANDROID" value="AIzaSyC4UMvdz8GABGCMzAH8nwsEQh5tBcMbS5Q" />
+        <variable name="API_KEY_FOR_IOS" value="AIzaSyDJ3jY1XsXR1YBNZl_XEZEbC2aI8EAoKVo" />
     </plugin>
 </widget>

@@ -12,15 +12,18 @@
 </ion-header>
 
 <ion-content padding>
-  <h6 class="text" margin-top>Nama Kiriman : <span class="value">{{ detail.nama }}</span></h6>
+  <h6 class="text" margin-top>Judul : <span class="value">{{ detail.nama }}</span></h6>
   <h6 class="text">Keterangan : <span class="value">{{ detail.keterangan }}</span> </h6>
   <h6 class="text">Asal : <span class="value">{{ detail.lokasi_asal }}</span> </h6>
   <h6 class="text">Tujuan : <span class="value">{{ detail.lokasi_tujuan }}</span> </h6>
-  <h6 class="text">Barang yang dikirim</h6>
+  <a href="#" (click)="mapsOnClick()">
+    <div id="map" style="width: 100%; height: 200px;"></div>
+  </a>
+  <h6 class="text label-barang-yang-dikirim">Barang yang dikirim</h6>
   <div>
     <ion-list class="list-barang">
       <ion-item *ngFor="let item of items">
-        <h6 class="text" text-wrap>Nama Barang : <span class="value">{{ item.item_name }}</span></h6>
+        <h6 class="text label-nama-barang" text-wrap>Nama Barang : <span class="value">{{ item.item_name }}</span></h6>
         <h6 class="text" text-wrap>Detail : <span class="value">{{ item.item_desc }}</span></h6>
         <h6 class="text" text-wrap>Dimensi : <span class="value">{{ item.item_length }} {{ item.item_dimension_unit }} x {{ item.item_width }} {{ item.item_dimension_unit }} x {{ item.item_height }}  {{ item.item_dimension_unit }} </span></h6>
         <h6 class="text" text-wrap>Total Kubikasi : <span class="value">{{ item.item_kubikasi }} {{ item.item_kubikasi_unit }}</span></h6>
@@ -28,5 +31,9 @@
       </ion-item>
     </ion-list>
   </div>
-  <div id="map"></div>
+  <h6 class="text">Status Kiriman : <span class="value"></span> </h6>
+  <div class="slide-container">
+    <input class="slide" type="range" value="0" max="100" min="0" step="1" />
+    <div class="slide-text">Slide to Unlock</div>
+  </div>
 </ion-content>
