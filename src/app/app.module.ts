@@ -10,11 +10,13 @@ import { MyApp } from './app.component';
 import { LoginPage } from '../pages/login/login'
 import { HomePage } from '../pages/home/home';
 import { DetailPage } from '../pages/detail/detail';
+import { SetDeviceNumberPage } from '../pages/set-device-number/set-device-number';
 import { PopoverPage } from '../pages/popover/popover';
 import { DriverServiceProvider } from '../providers/driver-service/driver-service';
 import { ShipmentServiceProvider } from '../providers/shipment-service/shipment-service';
 
 import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions, Marker } from '@ionic-native/google-maps';
+import { Device } from '@ionic-native/device';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,8 @@ import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition, MarkerO
     LoginPage,
     HomePage,
     DetailPage,
-    PopoverPage
+    PopoverPage,
+    SetDeviceNumberPage
   ],
   imports: [
     BrowserModule,
@@ -36,7 +39,8 @@ import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition, MarkerO
     LoginPage,
     HomePage,
     DetailPage,
-    PopoverPage
+    PopoverPage,
+    SetDeviceNumberPage
   ],
   providers: [
     StatusBar,
@@ -44,7 +48,8 @@ import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition, MarkerO
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     DriverServiceProvider,
     ShipmentServiceProvider,
-    GoogleMaps
+    GoogleMaps,
+    Device
   ]
 })
 export class AppModule {}

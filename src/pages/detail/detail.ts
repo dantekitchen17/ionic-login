@@ -19,6 +19,9 @@ export class DetailPage {
   detail: {
     nama: string,
     keterangan: string,
+    status: number,
+    status_array: any,
+    status_text: string,
     berakhir: string,
     cara_pesan: string,
     lokasi_asal: string,
@@ -38,6 +41,7 @@ export class DetailPage {
   }>;
   nama: string;
   keterangan: string;
+  status_text: string;
 
   map: any;
   marker: any;
@@ -56,6 +60,9 @@ export class DetailPage {
     this.detail = {
       nama: item.shipment_title,
       keterangan: item.shipment_information,
+      status: item.shipment_status,
+      status_array: item.status_array,
+      status_text: item.status_text,
       berakhir: item.shipment_end_date,
       cara_pesan: item.order_type,
       lokasi_asal: item.location_from_address,
@@ -73,6 +80,7 @@ export class DetailPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad DetailPage');
     this.loadMap();
+    this.disableMapTouchMove();
   }
 
   loadItem() {
@@ -98,6 +106,13 @@ export class DetailPage {
       });
   }
 
+  disableMapTouchMove() {
+    var mapElement = document.getElementById("map");
+    mapElement.addEventListener("touchmove", function(e) {
+      return false;
+    });
+  }
+
   mapsOnClick() {
     window.open('https://www.google.com/maps/dir/' + this.location_from_lat + ',' + this.location_from_lng + "/" + this.location_to_lat + "," + this.location_to_lng, '_system');
   }
@@ -106,7 +121,10 @@ export class DetailPage {
     
     var coor = {lat: -25.363, lng: 131.044};
     this.map = new google.maps.Map(document.getElementById("map"), {
-      disableDefaultUI: true
+      disableDefaultUI: true,
+      clickableIcons: false,
+      draggable: false,
+      gestureHandling: "none"
     });
 
     var directionsService = new google.maps.DirectionsService;

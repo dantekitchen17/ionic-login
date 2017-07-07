@@ -28,7 +28,7 @@ export class PopoverPage {
   close() {
     this.viewCtrl.dismiss();
     this.storage.remove("isLoggedIn");
-    this.storage.remove("driver_id");
+    this.storage.remove("device_id");
     this.appCtrl.getRootNav().setRoot(LoginPage);
   }
 

@@ -31,9 +31,10 @@
       </ion-item>
     </ion-list>
   </div>
-  <h6 class="text">Status Kiriman : <span class="value"></span> </h6>
+  <h6 class="text">Status Kiriman : <ion-badge>{{ detail.status_text }}</ion-badge> </h6>
+  <h6 class="text">Note : <span class="value">Geser tombol ke kanan untuk mengupdate status kiriman</span></h6>
   <div class="slide-container">
     <input class="slide" type="range" value="0" max="100" min="0" step="1" />
-    <div class="slide-text">Slide to Unlock</div>
+    <div class="slide-text">Ubah status kiriman</div>
   </div>
 </ion-content>

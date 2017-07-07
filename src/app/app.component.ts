@@ -39,7 +39,7 @@ export class MyApp {
     //this.menu.close();
     this.menu.enable(false);
     this.storage.remove("isLoggedIn");
-    this.storage.remove("driver_id");
+    this.storage.remove("device_id");
     this.nav.setRoot(this.rootPage, {}, {animate: true, direction: 'forward'});
   }
 }

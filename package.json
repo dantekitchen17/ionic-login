@@ -21,10 +21,12 @@
     "@angular/platform-browser": "4.1.3",
     "@angular/platform-browser-dynamic": "4.1.3",
     "@ionic-native/core": "3.10.2",
+    "@ionic-native/device": "^3.13.1",
     "@ionic-native/google-maps": "^3.13.1",
     "@ionic-native/splash-screen": "3.10.2",
     "@ionic-native/status-bar": "3.10.2",
     "@ionic/storage": "2.0.1",
+    "cordova-plugin-device": "^1.1.4",
     "cordova-plugin-googlemaps": "^1.4.1",
     "cordova-plugin-whitelist": "^1.3.1",
     "cordova-sqlite-storage": "^2.0.4",
@@ -48,7 +50,8 @@
       "cordova-plugin-googlemaps": {
         "API_KEY_FOR_ANDROID": "AIzaSyC4UMvdz8GABGCMzAH8nwsEQh5tBcMbS5Q",
         "API_KEY_FOR_IOS": "AIzaSyDJ3jY1XsXR1YBNZl_XEZEbC2aI8EAoKVo"
-      }
+      },
+      "cordova-plugin-device": {}
     }
   }
 }
