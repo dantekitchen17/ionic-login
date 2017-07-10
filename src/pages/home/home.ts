@@ -4,6 +4,8 @@ import { Storage } from '@ionic/storage';
 import { DetailPage } from '../detail/detail';
 import { PopoverPage } from '../popover/popover';
 import { DriverServiceProvider } from '../../providers/driver-service/driver-service';
+import { LocationTrackerProvider } from '../../providers/location-tracker/location-tracker';
+import { BackgroundMode } from '@ionic-native/background-mode';
 
 /**
  * Generated class for the HomePage page.
@@ -35,6 +37,7 @@ export class HomePage {
     shipment_status: number,
     status_array: any,
     status_text: string,
+    additional_class: string,
     location_from_address: string,
     location_from_city: string,
     location_from_lat: number,
@@ -48,8 +51,16 @@ export class HomePage {
   emptyState: boolean;
   errorState: boolean;
 
-  constructor(public navCtrl: NavController, public menu: MenuController, public navParams: NavParams, public popoverCtrl: PopoverController, public driverService: DriverServiceProvider, public loading: LoadingController, public toast: ToastController, public storage: Storage) {
+  constructor(public navCtrl: NavController, public menu: MenuController, public navParams: NavParams, public popoverCtrl: PopoverController, public driverService: DriverServiceProvider, public loading: LoadingController, public toast: ToastController, public storage: Storage, public locationTracker: LocationTrackerProvider, public backgroundMode: BackgroundMode) {
     this.menu.enable(true);
+
+    this.backgroundMode.on("activate").subscribe(() => {
+      this.backgroundMode.disableWebViewOptimizations();
+    });
+    this.backgroundMode.enable();
+    alert(this.backgroundMode.isActive());
+    this.backgroundMode.overrideBackButton();
+
     this.emptyState = false;
     this.errorState = false;
     this.status_array = {
@@ -58,6 +69,8 @@ export class HomePage {
       "4": "Diambil",
       "5": "Diterima"
     };
+
+    this.startTracking();
   }
 
   ionViewDidLoad() {
@@ -78,12 +91,12 @@ export class HomePage {
     ];*/
   }
 
-  ngAfterViewInit() {
-    var badges = document.getElementsByClassName("status");
-    for (var i = 0; i < badges.length; i++) {
-      var text = badges[i].innerHTML;
-      badges[i].className += "badge-status-" + text;
-    }
+  startTracking() {
+    this.locationTracker.startTracking();
+  }
+
+  stopTracking() {
+    this.locationTracker.stopTracking();
   }
 
   presentToast(message) {
@@ -126,6 +139,7 @@ export class HomePage {
                 shipment_status: item.shipment_status,
                 status_array: this.status_array,
                 status_text: this.status_array[item.shipment_status + ""],
+                additional_class: "badge-status-" + this.status_array[item.shipment_status + ""],
                 location_from_address: item.location_from_address,
                 location_from_city: item.location_from_city,
                 location_from_lat: item.location_from_lat,

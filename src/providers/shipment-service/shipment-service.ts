@@ -24,7 +24,7 @@ export class ShipmentServiceProvider {
     }
     
     return new Promise(resolve => {
-      this.http.get('https://dantekitchen17.000webhostapp.com/api/driver/shipment/' + id)
+      this.http.get('https://dantekitchen17.000webhostapp.com/api/device/shipment/' + id)
         .timeout(1000)
         .map(res => res.json())
         .subscribe(data => {

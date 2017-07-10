@@ -14,9 +14,14 @@ import { SetDeviceNumberPage } from '../pages/set-device-number/set-device-numbe
 import { PopoverPage } from '../pages/popover/popover';
 import { DriverServiceProvider } from '../providers/driver-service/driver-service';
 import { ShipmentServiceProvider } from '../providers/shipment-service/shipment-service';
+import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
+import { Geolocation } from '@ionic-native/geolocation';
 
 import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions, Marker } from '@ionic-native/google-maps';
 import { Device } from '@ionic-native/device';
+import { LocationTrackerProvider } from '../providers/location-tracker/location-tracker';
+import { Toast } from '@ionic-native/toast';
+import { BackgroundMode } from '@ionic-native/background-mode';
 
 @NgModule({
   declarations: [
@@ -49,7 +54,12 @@ import { Device } from '@ionic-native/device';
     DriverServiceProvider,
     ShipmentServiceProvider,
     GoogleMaps,
-    Device
+    Device,
+    BackgroundGeolocation,
+    Geolocation,
+    LocationTrackerProvider,
+    Toast,
+    BackgroundMode
   ]
 })
 export class AppModule {}

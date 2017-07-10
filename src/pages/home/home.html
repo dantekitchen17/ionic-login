@@ -36,8 +36,9 @@
       <h3 text-wrap margin-top>Asal : <span class="value">{{ item.location_from_address }}</span></h3>
       <h3 text-wrap margin-top>Tujuan : <span class="value">{{ item.location_to_address }}</span></h3>
       <h3 text-wrap margin-top>Jarak : <span class="value">{{ item.shipment_length }} Km</span></h3>
-      <ion-badge class="status">{{ item.status_text }}</ion-badge>
+      <ion-badge class="status" ngClass="{{ item.additional_class }}">{{ item.status_text }}</ion-badge>
       <button ion-button full default margin-top>Lihat Detail</button>
     </ion-item>
   </ion-list>
+  <div>{{ locationTracker.lat }}, {{ locationTracker.lng }}</div>
 </ion-content>
