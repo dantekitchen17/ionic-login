@@ -1,8 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
-import { Geolocation, Geoposition } from '@ionic-native/geolocation';
-import { Toast } from '@ionic-native/toast';
+import { Storage } from '@ionic/storage';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 
@@ -14,12 +13,15 @@ import 'rxjs/add/operator/filter';
 */
 @Injectable()
 export class LocationTrackerProvider {
+  public id: number;
   public watch: any;
   public lat: number = 0;
   public lng: number = 0;
 
-  constructor(public zone: NgZone, public backgroundGeoLocation: BackgroundGeolocation, public geoLocation: Geolocation, private toast: Toast) {
-    
+  constructor(public zone: NgZone, public http: Http, public backgroundGeoLocation: BackgroundGeolocation, public storage: Storage) {
+    storage.get("device_id").then((value) => {
+      this.id = value;
+    });
   }
 
   startTracking() {
@@ -30,11 +32,27 @@ export class LocationTrackerProvider {
       debug: true,
       startOnBoot: true,
       saveBatteryOnBackground: false,
-      interval: 60000
+      stopOnTerminate: false,
+      notificationTitle: "Yukirim",
+      notificationText: "is running in background",
+      interval: 300000
     };
 
     this.backgroundGeoLocation.configure(config).subscribe((location) => {
-      this.toast.show(location.latitude + ", " + location.longitude, "5000", "bottom");
+      let headers = new Headers();
+      headers.append("Content-Type", "application/x-www-form-urlencoded");
+      let options = new RequestOptions({headers: headers});
+      
+      let urlSearchParams = new URLSearchParams();
+      urlSearchParams.append("device_id", this.id + "");
+      urlSearchParams.append("lat", location.latitude + "");
+      urlSearchParams.append("lng", location.longitude + "");
+      urlSearchParams.append("accuracy", location.accuracy + "");
+      let body = urlSearchParams.toString();
+      this.http.post("https://dantekitchen17.000webhostapp.com/api/post-coordinate", body, options)
+        .subscribe(data => {
+          
+      });
       this.zone.run(() => {
         this.lat = location.latitude;
         this.lng = location.longitude;
@@ -58,26 +76,12 @@ export class LocationTrackerProvider {
         this.backgroundGeoLocation.showLocationSettings();
       }
     });
-
-    /*let options = {
-      frequency: 3000,
-      enableHighAccuracy: true
-    };
-
-    this.watch = this.geoLocation.watchPosition(options).filter((p: any) => p.code === undefined).subscribe((position: Geoposition) => {
-      console.log(position);
-
-      this.zone.run(() => {
-        this.lat = position.coords.latitude;
-        this.lng = position.coords.longitude;
-      });
-    });*/
   }
 
   stopTracking() {
     console.log('stop tracking');
     
     this.backgroundGeoLocation.finish();
-    //this.watch.unsubscribe();
+    this.backgroundGeoLocation.stop();
   }
 }

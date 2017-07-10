@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, MenuController, PopoverController, LoadingController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, MenuController, PopoverController, LoadingController, Platform, ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { DetailPage } from '../detail/detail';
 import { PopoverPage } from '../popover/popover';
 import { DriverServiceProvider } from '../../providers/driver-service/driver-service';
 import { LocationTrackerProvider } from '../../providers/location-tracker/location-tracker';
 import { BackgroundMode } from '@ionic-native/background-mode';
+import { AppMinimize } from '@ionic-native/app-minimize';
 
 /**
  * Generated class for the HomePage page.
@@ -51,15 +52,22 @@ export class HomePage {
   emptyState: boolean;
   errorState: boolean;
 
-  constructor(public navCtrl: NavController, public menu: MenuController, public navParams: NavParams, public popoverCtrl: PopoverController, public driverService: DriverServiceProvider, public loading: LoadingController, public toast: ToastController, public storage: Storage, public locationTracker: LocationTrackerProvider, public backgroundMode: BackgroundMode) {
+  constructor(public navCtrl: NavController, public menu: MenuController, public navParams: NavParams, public popoverCtrl: PopoverController, public driverService: DriverServiceProvider, public loading: LoadingController, public storage: Storage, public locationTracker: LocationTrackerProvider, public backgroundMode: BackgroundMode, public appMinimize: AppMinimize, private platform: Platform, public toast: ToastController) {
     this.menu.enable(true);
+
+    this.platform.registerBackButtonAction(() => {
+      this.appMinimize.minimize();
+    });
 
     this.backgroundMode.on("activate").subscribe(() => {
       this.backgroundMode.disableWebViewOptimizations();
     });
     this.backgroundMode.enable();
-    alert(this.backgroundMode.isActive());
-    this.backgroundMode.overrideBackButton();
+    this.backgroundMode.setDefaults({
+      title: "Yukirim",
+      text: "is running in background",
+      resume: true
+    });
 
     this.emptyState = false;
     this.errorState = false;

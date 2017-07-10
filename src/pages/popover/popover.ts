@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, ViewController, App } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { LoginPage } from '../login/login';
+import { LocationTrackerProvider } from '../../providers/location-tracker/location-tracker';
 /**
  * Generated class for the PopoverPage page.
  *
@@ -19,13 +20,14 @@ export class PopoverPage {
     text: string
   }>;
 
-  constructor(public viewCtrl: ViewController, public appCtrl: App, public storage: Storage) {
+  constructor(public viewCtrl: ViewController, public appCtrl: App, public storage: Storage, public locationTracker: LocationTrackerProvider) {
     this.items = [
       {name: "logout", text: "Logout"}
     ];
   }
 
   close() {
+    this.locationTracker.stopTracking();
     this.viewCtrl.dismiss();
     this.storage.remove("isLoggedIn");
     this.storage.remove("device_id");

@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, Renderer2 } from '@angular/core';
 import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
 import { ShipmentServiceProvider } from '../../providers/shipment-service/shipment-service';
 
@@ -15,6 +15,8 @@ declare var google;
   templateUrl: 'detail.html',
 })
 export class DetailPage {
+  @ViewChild("slider") slider;
+
   id: number;
   detail: {
     nama: string,
@@ -52,7 +54,7 @@ export class DetailPage {
   location_to_lng: any;
   center_from: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public shipmentService: ShipmentServiceProvider, public menu: MenuController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public shipmentService: ShipmentServiceProvider, public menu: MenuController, public renderer2: Renderer2) {
     this.items = [];
     this.menu.swipeEnable(false);
 
@@ -83,6 +85,17 @@ export class DetailPage {
     console.log('ionViewDidLoad DetailPage');
     this.loadMap();
     this.disableMapTouchMove();
+  }
+
+  ngAfterViewInit() {
+    var nativeElement = this.slider.nativeElement;
+    this.renderer2.listen(nativeElement, "touchend", (evt) => {
+      if (nativeElement.value == nativeElement.max) {
+        alert("100%");
+      } else {
+        nativeElement.value = 0;
+      }
+    });
   }
 
   loadItem() {

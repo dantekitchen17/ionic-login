@@ -17,11 +17,12 @@ import { ShipmentServiceProvider } from '../providers/shipment-service/shipment-
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 import { Geolocation } from '@ionic-native/geolocation';
 
-import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions, Marker } from '@ionic-native/google-maps';
+//import { GoogleMaps } from '@ionic-native/google-maps';
 import { Device } from '@ionic-native/device';
 import { LocationTrackerProvider } from '../providers/location-tracker/location-tracker';
 import { Toast } from '@ionic-native/toast';
 import { BackgroundMode } from '@ionic-native/background-mode';
+import { AppMinimize } from '@ionic-native/app-minimize';
 
 @NgModule({
   declarations: [
@@ -53,13 +54,14 @@ import { BackgroundMode } from '@ionic-native/background-mode';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     DriverServiceProvider,
     ShipmentServiceProvider,
-    GoogleMaps,
+    //GoogleMaps,
     Device,
     BackgroundGeolocation,
     Geolocation,
     LocationTrackerProvider,
     Toast,
-    BackgroundMode
+    BackgroundMode,
+    AppMinimize
   ]
 })
 export class AppModule {}
