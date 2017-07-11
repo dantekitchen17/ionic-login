@@ -29,7 +29,7 @@ export class LocationTrackerProvider {
       desiredAccuracy: 10,
       stationaryRadius: 20,
       distanceFilter: 30,
-      debug: true,
+      debug: false,
       startOnBoot: true,
       saveBatteryOnBackground: false,
       stopOnTerminate: false,

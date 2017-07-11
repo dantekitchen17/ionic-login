@@ -25,12 +25,12 @@
   </ion-refresher>
   <div class="error-state" margin-bottom *ngIf="errorState">
     <h6 class="error-text" text-wrap>Tidak bisa terkoneksi ke internet</h6>
-    <button ion-button clear float-right (click)="ionViewDidLoad()">Coba Lagi</button>
+    <button class="btn-coba-lagi" ion-button clear float-right (click)="ionViewDidLoad()">Coba Lagi</button>
   </div>
   <div class="empty-state" *ngIf="emptyState">
     <span>tidak ada kiriman</span>
   </div>
-  <ion-list>
+  <ion-list class="list">
     <ion-item *ngFor="let item of items" (click)="itemClick($event, item);">
       <h2 class="title" text-wrap>{{ item.shipment_title }}</h2>
       <h3 text-wrap margin-top>Asal : <span class="value">{{ item.location_from_address }}</span></h3>
@@ -40,5 +40,4 @@
       <button ion-button full default margin-top>Lihat Detail</button>
     </ion-item>
   </ion-list>
-  <div>{{ locationTracker.lat }}, {{ locationTracker.lng }}</div>
 </ion-content>

@@ -12,15 +12,16 @@ import 'rxjs/add/operator/retry';
 */
 @Injectable()
 export class ShipmentServiceProvider {
-  data: any;
+  result: any;
 
   constructor(public http: Http) {
     console.log('Hello ShipmentServiceProvider Provider');
+    this.result = {};
   }
 
-  load(id: number) {
-    if (this.data) {
-      return Promise.resolve(this.data);
+  load(id: number) {    
+    if (this.result.data) {
+      return Promise.resolve(this.result.data);
     }
     
     return new Promise(resolve => {
@@ -28,11 +29,14 @@ export class ShipmentServiceProvider {
         .timeout(10000)
         .map(res => res.json())
         .subscribe(data => {
-          this.data = data;
-          resolve(this.data);
+          this.result.status = "success";
+          this.result.data = data;
+          resolve(this.result);
         }, (err) => {
-          alert(err);
-          console.log(err);
+          this.result.status = "error";
+          this.result.errorName = err.name;
+          this.result.errorMessage = err.message;
+          resolve(this.result);
         });
     });
   }

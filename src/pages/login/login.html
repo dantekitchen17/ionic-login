@@ -12,11 +12,11 @@
   <ion-list class="ion-list">
     <ion-item>
       <ion-label floating>Username</ion-label>
-      <ion-input type="text" maxlength="20"></ion-input>
+      <ion-input type="text" maxlength="20" [(ngModel)]="username"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label floating>Password</ion-label>
-      <ion-input type="password" maxlength="20"></ion-input>
+      <ion-input type="password" maxlength="20" [(ngModel)]="password"></ion-input>
     </ion-item>
   </ion-list>
   <button class="btn-login" ion-button full large margin-top (click)="doLogin();">Login</button>

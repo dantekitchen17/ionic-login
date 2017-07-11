@@ -52,11 +52,17 @@ export class HomePage {
   emptyState: boolean;
   errorState: boolean;
 
+  refreshAfterBack: boolean = false;
+
   constructor(public navCtrl: NavController, public menu: MenuController, public navParams: NavParams, public popoverCtrl: PopoverController, public driverService: DriverServiceProvider, public loading: LoadingController, public storage: Storage, public locationTracker: LocationTrackerProvider, public backgroundMode: BackgroundMode, public appMinimize: AppMinimize, private platform: Platform, public toast: ToastController) {
     this.menu.enable(true);
-
+    
     this.platform.registerBackButtonAction(() => {
-      this.appMinimize.minimize();
+      if (this.navCtrl.canGoBack()) {
+        this.navCtrl.pop();
+      } else {
+        this.appMinimize.minimize();
+      }
     });
 
     this.backgroundMode.on("activate").subscribe(() => {
@@ -68,6 +74,8 @@ export class HomePage {
       text: "is running in background",
       resume: true
     });
+
+    this.items = [];
 
     this.emptyState = false;
     this.errorState = false;
@@ -99,6 +107,17 @@ export class HomePage {
     ];*/
   }
 
+  ionViewDidEnter() {
+    if (this.refreshAfterBack) {
+      this.refreshAfterBack = false;
+      this.loader = this.loading.create({
+        content: "sedang refresh data..."
+      });
+      this.loader.present();
+      this.loadItems(null, true);
+    }
+  }
+
   startTracking() {
     this.locationTracker.startTracking();
   }
@@ -122,8 +141,8 @@ export class HomePage {
     });
   }
 
-  loadItems(refresher = null) {
-    this.driverService.load(refresher)
+  loadItems(refresher = null, reload = false) {
+    this.driverService.load(reload)
       .then(result => {
         if (refresher) {
           refresher.complete();
@@ -160,26 +179,34 @@ export class HomePage {
             ];
           }
 
-          if (iLength == 0) {
-            this.emptyState = true;
-          } else {
-            this.emptyState = false;
-          }
         } else {
           this.errorState = true;
-          this.emptyState = true;
           this.presentToast(result.errorName + ": " + result.errorMessage);
+        }
+
+        if (this.items.length == 0) {
+          this.emptyState = true;
+        } else {
+          this.emptyState = false;
         }
       });
   }
 
   refreshData(refresher) {
-    this.loadItems(refresher);
+    this.loadItems(refresher, true);
   }
 
   itemClick(event, item) {
     this.navCtrl.push(DetailPage, {
-      item: item
+      item: item,
+      callback: this.callbackFunction
+    });
+  }
+
+  callbackFunction = (refresh) => {
+    return new Promise((resolve, reject) => {
+      this.refreshAfterBack = refresh;
+      resolve;
     });
   }
 }

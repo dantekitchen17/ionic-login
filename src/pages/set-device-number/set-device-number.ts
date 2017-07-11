@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, PopoverController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { HomePage } from '../home/home';
+import { PopoverPage } from '../popover/popover';
 
 /**
  * Generated class for the SetDeviceNumberPage page.
@@ -17,7 +18,7 @@ import { HomePage } from '../home/home';
 export class SetDeviceNumberPage {
   id: string;
   btnDisabled: boolean = true;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alert: AlertController, public storage: Storage) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alert: AlertController, public storage: Storage, public popoverCtrl: PopoverController) {
   }
 
   ionViewDidLoad() {
@@ -30,6 +31,13 @@ export class SetDeviceNumberPage {
     } else {
       this.btnDisabled = true;
     }
+  }
+
+  presentPopover(ev) {
+    let popover = this.popoverCtrl.create(PopoverPage);
+    popover.present({
+      ev: ev
+    });
   }
 
   showConfirm() {

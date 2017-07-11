@@ -2,7 +2,12 @@ page-home {
     .error-state {
         .error-text {
             display: inline-block;
+            width: 65%;
             margin-top: 10px;
+        }
+
+        .btn-coba-lagi {
+            display: inline-block !important;
         }
     }
 
@@ -19,6 +24,10 @@ page-home {
             font-size: 2em;
             color: #777;
         }
+    }
+
+    .list {
+        clear: both !important;
     }
 
     .title {

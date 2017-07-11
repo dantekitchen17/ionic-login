@@ -1,5 +1,7 @@
 import { Component, ViewChild, Renderer2 } from '@angular/core';
-import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, MenuController, Platform, LoadingController } from 'ionic-angular';
+import { Http, Headers, RequestOptions, URLSearchParams } from '@angular/http';
+import { Storage } from '@ionic/storage';
 import { ShipmentServiceProvider } from '../../providers/shipment-service/shipment-service';
 
 declare var google;
@@ -17,6 +19,11 @@ declare var google;
 export class DetailPage {
   @ViewChild("slider") slider;
 
+  callback: any;
+  loader: any;
+  loaded: boolean = false;
+
+  device_id: number;
   id: number;
   detail: {
     nama: string,
@@ -54,10 +61,15 @@ export class DetailPage {
   location_to_lng: any;
   center_from: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public shipmentService: ShipmentServiceProvider, public menu: MenuController, public renderer2: Renderer2) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public shipmentService: ShipmentServiceProvider, public menu: MenuController, public renderer2: Renderer2, public http: Http, public storage: Storage, public platform: Platform, public loading: LoadingController) {
+
     this.items = [];
     this.menu.swipeEnable(false);
+    storage.get("device_id").then((value) => {
+      this.device_id = value;
+    });
 
+    this.callback = navParams.get("callback");
     var item = navParams.get("item");
     this.id = item.id;
     this.detail = {
@@ -91,32 +103,70 @@ export class DetailPage {
     var nativeElement = this.slider.nativeElement;
     this.renderer2.listen(nativeElement, "touchend", (evt) => {
       if (nativeElement.value == nativeElement.max) {
-        alert("100%");
+        this.submit();
       } else {
         nativeElement.value = 0;
       }
     });
   }
 
+  submit() {
+    this.loader = this.loading.create({
+      content: "submitting data..."
+    });
+    this.loader.present();
+
+    let headers = new Headers();
+    headers.append("Content-Type", "application/x-www-form-urlencoded");
+    let options = new RequestOptions({headers: headers});
+    
+    let urlSearchParams = new URLSearchParams();
+    urlSearchParams.append("shipment_id", this.id + "");
+    urlSearchParams.append("device_id", this.device_id + "");
+    let body = urlSearchParams.toString();
+
+    var url = "";
+    if (this.detail.status == 2) {
+      url = "https://dantekitchen17.000webhostapp.com/api/submit-kirim";
+    } else if (this.detail.status == 3) {
+      url = "https://dantekitchen17.000webhostapp.com/api/submit-ambil";
+    } else if (this.detail.status == 4) {
+      url = "https://dantekitchen17.000webhostapp.com/api/submit-terima";
+    }
+    
+    this.http.post(url, body, options)
+      .subscribe(data => {
+        this.loader.dismiss();
+        this.callback(true);
+        this.navCtrl.pop();
+    });
+  }
+
   loadItem() {
     this.shipmentService.load(this.id)
-      .then(data => {
-        var iLength = data.length;
-        for (var i = 0; i < iLength; i++) {
-          var each = data[i];
-          var item = {
-            item_name: each.item_name,
-            item_desc: each.item_desc,
-            item_length: each.item_length,
-            item_width: each.item_width,
-            item_height: each.item_height,
-            item_dimension_unit: each.item_dimension_unit,
-            item_kubikasi: each.item_kubikasi,
-            item_kubikasi_unit: each.item_kubikasi_unit,
-            item_weight: each.item_weight,
-            item_weight_unit: each.item_weight_unit
+      .then(result => {
+        if (result.status == "success") {
+          var iLength = result.data.length;
+          for (var i = 0; i < iLength; i++) {
+            var each = result.data[i];
+            var item = {
+              item_name: each.item_name,
+              item_desc: each.item_desc,
+              item_length: each.item_length,
+              item_width: each.item_width,
+              item_height: each.item_height,
+              item_dimension_unit: each.item_dimension_unit,
+              item_kubikasi: each.item_kubikasi,
+              item_kubikasi_unit: each.item_kubikasi_unit,
+              item_weight: each.item_weight,
+              item_weight_unit: each.item_weight_unit
+            }
+            this.items.push(item);
           }
-          this.items.push(item);
+
+          this.loaded = true;
+        } else {
+
         }
       });
   }

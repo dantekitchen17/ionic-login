@@ -8,6 +8,9 @@
 
   <ion-navbar>
     <ion-title>Pengaturan</ion-title>
+    <button class="popover" ion-button icon-only (click)="presentPopover($event);">
+      <ion-icon name="more"></ion-icon>
+    </button>
   </ion-navbar>
 
 </ion-header>
@@ -15,7 +18,7 @@
 
 <ion-content padding>
   <ion-item>
-    <ion-label>Masukkan nomor device</ion-label>
+    <ion-label stacked>Masukkan nomor device</ion-label>
     <ion-input type="tel" maxlength="4" [(ngModel)]="id" (input)="onInput($event)"></ion-input>
   </ion-item>
   <button ion-button default full margin-top [disabled]="btnDisabled" (click)="showConfirm()">Simpan</button>
