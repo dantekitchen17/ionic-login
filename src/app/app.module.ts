@@ -10,7 +10,6 @@ import { MyApp } from './app.component';
 import { LoginPage } from '../pages/login/login'
 import { HomePage } from '../pages/home/home';
 import { DetailPage } from '../pages/detail/detail';
-import { SetDeviceNumberPage } from '../pages/set-device-number/set-device-number';
 import { PopoverPage } from '../pages/popover/popover';
 import { DriverServiceProvider } from '../providers/driver-service/driver-service';
 import { ShipmentServiceProvider } from '../providers/shipment-service/shipment-service';
@@ -23,6 +22,7 @@ import { LocationTrackerProvider } from '../providers/location-tracker/location-
 import { Toast } from '@ionic-native/toast';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { AppMinimize } from '@ionic-native/app-minimize';
+import { Dialogs } from '@ionic-native/dialogs';
 
 @NgModule({
   declarations: [
@@ -30,8 +30,7 @@ import { AppMinimize } from '@ionic-native/app-minimize';
     LoginPage,
     HomePage,
     DetailPage,
-    PopoverPage,
-    SetDeviceNumberPage
+    PopoverPage
   ],
   imports: [
     BrowserModule,
@@ -45,8 +44,7 @@ import { AppMinimize } from '@ionic-native/app-minimize';
     LoginPage,
     HomePage,
     DetailPage,
-    PopoverPage,
-    SetDeviceNumberPage
+    PopoverPage
   ],
   providers: [
     StatusBar,
@@ -61,7 +59,8 @@ import { AppMinimize } from '@ionic-native/app-minimize';
     LocationTrackerProvider,
     Toast,
     BackgroundMode,
-    AppMinimize
+    AppMinimize,
+    Dialogs
   ]
 })
 export class AppModule {}

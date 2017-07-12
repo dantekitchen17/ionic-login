@@ -22,7 +22,6 @@ import { AppMinimize } from '@ionic-native/app-minimize';
 })
 
 export class HomePage {
-  driver_id: number;
   status_array: {
     "2": string,
     "3": string,
@@ -46,7 +45,8 @@ export class HomePage {
     location_to_address: string,
     location_to_city: string,
     location_to_lat: number,
-    location_to_lng: number
+    location_to_lng: number,
+    driver_name: string
   }>;
   loader: any;
   emptyState: boolean;
@@ -94,11 +94,7 @@ export class HomePage {
       content: "sedang refresh data..."
     });
     this.loader.present();
-
-    this.storage.get("driver_id").then((value) => {
-      this.driver_id = value;
-      this.loadItems();
-    });
+    this.loadItems();
     
     /*this.items = [
       {id: 1, shipment_title: "Kirim furniture", location_from_city: "Surabaya", location_to_city: "Jakarta"},
@@ -151,10 +147,12 @@ export class HomePage {
         if (this.loader) {
           this.loader.dismiss();
         }
-
+        
         if (result.status == "success") {
           this.errorState = false;
           var iLength = result.data.length;
+          var str = JSON.stringify(result.data);
+          alert(str);
           for (var i = 0; i < iLength; i++) {
             var item = result.data[i];
             this.items = [
@@ -174,7 +172,8 @@ export class HomePage {
                 location_to_address: item.location_to_address,
                 location_to_city: item.location_to_city,
                 location_to_lat: item.location_to_lat,
-                location_to_lng: item.location_to_lng
+                location_to_lng: item.location_to_lng,
+                driver_name: item.driver_name
               }
             ];
           }

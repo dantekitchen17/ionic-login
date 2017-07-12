@@ -30,9 +30,9 @@ export class MyApp {
   }
 
   sideMenuClick(item) {
-    if (item.data == "logout") {
+    /*if (item.data == "logout") {
       this.logout();
-    }
+    }*/
   }
 
   logout() {

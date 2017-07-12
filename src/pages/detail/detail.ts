@@ -53,8 +53,11 @@ export class DetailPage {
   keterangan: string;
   status_text: string;
 
+  currentLocation: any = null;
   map: any;
   marker: any;
+  directionsService: any;
+  directionsDisplay: any;
   location_from_lat: any;
   location_from_lng: any;
   location_to_lat: any;
@@ -89,7 +92,7 @@ export class DetailPage {
     this.location_from_lng = item.location_from_lng;
     this.location_to_lat = item.location_to_lat;
     this.location_to_lng = item.location_to_lng;
-    
+
     this.loadItem();
   }
 
@@ -97,6 +100,10 @@ export class DetailPage {
     console.log('ionViewDidLoad DetailPage');
     this.loadMap();
     this.disableMapTouchMove();
+
+    this.storage.get("location").then((value) => {
+      this.currentLocation = value;
+    });
   }
 
   ngAfterViewInit() {
@@ -179,18 +186,30 @@ export class DetailPage {
   }
 
   mapsOnClick() {
-    window.open('https://www.google.com/maps/dir/' + this.location_from_lat + ',' + this.location_from_lng + "/" + this.location_to_lat + "," + this.location_to_lng, '_system');
+    if (this.detail.status == 2) {
+      window.open('https://www.google.com/maps/dir/Current+Location/' + this.location_from_lat + ',' + this.location_from_lng, '_system');
+    } else {
+      window.open('https://www.google.com/maps/dir/Current+Location/' + this.location_to_lat + "," + this.location_to_lng, '_system');
+    }
   }
 
   loadMap() {
-    
-    var coor = {lat: -25.363, lng: 131.044};
     this.map = new google.maps.Map(document.getElementById("map"), {
       disableDefaultUI: true,
       clickableIcons: false,
       draggable: false,
       gestureHandling: "none"
     });
+
+
+    /*if (this.currentLocation != null) {
+      let position = {lat: this.currentLocation.lat, lng: this.currentLocation.lng};
+      var marker = new google.maps.Marker({
+        position: position,
+        map: this.map,
+        animation: google.maps.animation.DROP
+      });
+    }*/
 
     var directionsService = new google.maps.DirectionsService;
     var directionsDisplay = new google.maps.DirectionsRenderer;
@@ -200,7 +219,7 @@ export class DetailPage {
 
   calculateAndDisplayRoute(directionsService, directionsDisplay) {
     directionsService.route({
-      origin: new google.maps.LatLng(this.location_from_lat, this.location_from_lng),
+      origin: new google.maps.LatLng(this.location_from_lat, this.location_from_lat),
       destination: new google.maps.LatLng(this.location_to_lat, this.location_to_lng),
       travelMode: "DRIVING"
     }, function(response, status) {

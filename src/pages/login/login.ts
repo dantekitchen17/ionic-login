@@ -4,7 +4,6 @@ import { Http, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import { Device } from '@ionic-native/device';
 import { Storage } from '@ionic/storage';
 import { HomePage } from '../home/home';
-import { SetDeviceNumberPage } from '../set-device-number/set-device-number';
 
 /**
  * Generated class for the LoginPage page.
@@ -19,12 +18,12 @@ import { SetDeviceNumberPage } from '../set-device-number/set-device-number';
 })
 export class LoginPage {
   loader: any;
-  username: string;
+  email: string;
   password: string;
+  device_id: string;
   toast: any;
 
   constructor(public navCtrl: NavController, public menu: MenuController, public navParams: NavParams, public storage: Storage, private device: Device, public platform: Platform, public http: Http, public loading: LoadingController, private toastCtrl: ToastController) {
-    console.log(device.manufacturer + "\n" + device.model + "\n" + device.platform + "\n" + device.serial + "\n" + device.uuid + "\n" + device.version);
     this.menu.enable(false);
     this.platform.registerBackButtonAction(() => {
       this.platform.exitApp();
@@ -32,13 +31,7 @@ export class LoginPage {
 
     storage.get("isLoggedIn").then((val) => {
       if (val != null) {
-        storage.get("device_id").then((device_id) => {
-          if (device_id != null) {
-            this.navCtrl.setRoot(HomePage);
-          } else {
-            this.navCtrl.setRoot(SetDeviceNumberPage);
-          }
-        });
+        this.navCtrl.setRoot(HomePage);
       }
     });
   }
@@ -70,17 +63,21 @@ export class LoginPage {
     let options = new RequestOptions({headers: headers});
     
     let urlSearchParams = new URLSearchParams();
-    urlSearchParams.append("username", this.username);
+    urlSearchParams.append("email", this.email);
     urlSearchParams.append("password", this.password);
+    urlSearchParams.append("device_id", this.device_id);
     let body = urlSearchParams.toString();
     this.http.post("https://dantekitchen17.000webhostapp.com/api/login", body, options)
       .subscribe(data => {
         if (data.status == 200) {
-          if (data.text() == "success") {
+          var result = JSON.parse(data.text());
+          if (result.result == "success") {
             this.storage.set("isLoggedIn", true);
-            this.navCtrl.setRoot(SetDeviceNumberPage);
+            this.storage.set("device_id", this.device_id);
+            this.storage.set("token", result.generated_token);
+            this.navCtrl.setRoot(HomePage);
           } else {
-            this.presentToast("Username / Password salah");
+            this.presentToast("Email / Password / Device ID salah");
           }
         } else {
           this.presentToast("Tidak bisa terhubung dengan server");

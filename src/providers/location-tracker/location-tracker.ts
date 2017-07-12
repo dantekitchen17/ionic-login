@@ -39,6 +39,12 @@ export class LocationTrackerProvider {
     };
 
     this.backgroundGeoLocation.configure(config).subscribe((location) => {
+      this.storage.set("location", {
+        lat: location.latitude,
+        lng: location.longitude,
+        accuracy: location.accuracy
+      });
+
       let headers = new Headers();
       headers.append("Content-Type", "application/x-www-form-urlencoded");
       let options = new RequestOptions({headers: headers});
