@@ -198,6 +198,8 @@ export class DetailPage {
 
   mapsOnClick() {
     if (this.detail.status == 2) {
+      window.open('https://www.google.com/maps/dir/' + this.location_from_lat + ',' + this.location_from_lng + "/" + this.location_to_lat + "," + this.location_to_lng, '_system');
+    } else if (this.detail.status == 3) {
       window.open('https://www.google.com/maps/dir/Current+Location/' + this.location_from_lat + ',' + this.location_from_lng, '_system');
     } else {
       window.open('https://www.google.com/maps/dir/Current+Location/' + this.location_to_lat + "," + this.location_to_lng, '_system');
@@ -231,13 +233,20 @@ export class DetailPage {
     var from_lat, from_lng, to_lat, to_lng;
     from_lat = this.currentLocation.lat;
     from_lng = this.currentLocation.lng;
+
     if (this.detail.status == 2) {
+      from_lat = this.location_from_lat;
+      from_lng = this.location_from_lng;
+      to_lat = this.location_to_lat;
+      to_lng = this.location_to_lng;
+    } else if (this.detail.status == 3) {
       to_lat = this.location_from_lat;
       to_lng = this.location_from_lng;
     } else {
       to_lat = this.location_to_lat;
       to_lng = this.location_to_lng;
     }
+
     directionsService.route({
       origin: new google.maps.LatLng(from_lat, from_lng),
       destination: new google.maps.LatLng(to_lat, to_lng),
