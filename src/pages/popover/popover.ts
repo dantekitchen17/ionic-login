@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, ViewController, App } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
-import { LoginPage } from '../login/login';
-import { LocationTrackerProvider } from '../../providers/location-tracker/location-tracker';
+import { IonicPage, ViewController } from 'ionic-angular';
+import { CommonServiceProvider } from '../../providers/common-service/common-service';
 import { Dialogs } from '@ionic-native/dialogs';
 /**
  * Generated class for the PopoverPage page.
@@ -21,25 +19,19 @@ export class PopoverPage {
     text: string
   }>;
 
-  constructor(public viewCtrl: ViewController, public appCtrl: App, public storage: Storage, public locationTracker: LocationTrackerProvider, public dialogs: Dialogs) {
+  constructor(public viewCtrl: ViewController, public dialogs: Dialogs, public commonService: CommonServiceProvider) {
     this.items = [
       {name: "logout", text: "Logout"}
     ];
-  }
-
-  close() {
-    this.locationTracker.stopTracking();
-    this.storage.remove("isLoggedIn");
-    this.storage.remove("device_id");
-    this.appCtrl.getRootNav().setRoot(LoginPage);
   }
 
   showConfirm() {
     this.viewCtrl.dismiss();
     this.dialogs.confirm("Yakin ingin logout?", "Logout", ["Ya", "Tidak"]).then((index) => {
       if (index == 1) {
-        this.close();
+        this.commonService.logout();
       }
     });
   }
+  
 }

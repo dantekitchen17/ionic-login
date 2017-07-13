@@ -20,7 +20,6 @@ export class LoginPage {
   loader: any;
   email: string;
   password: string;
-  device_id: string;
   toast: any;
 
   constructor(public navCtrl: NavController, public menu: MenuController, public navParams: NavParams, public storage: Storage, private device: Device, public platform: Platform, public http: Http, public loading: LoadingController, private toastCtrl: ToastController) {
@@ -65,7 +64,6 @@ export class LoginPage {
     let urlSearchParams = new URLSearchParams();
     urlSearchParams.append("email", this.email);
     urlSearchParams.append("password", this.password);
-    urlSearchParams.append("device_id", this.device_id);
     let body = urlSearchParams.toString();
     this.http.post("https://dantekitchen17.000webhostapp.com/api/login", body, options)
       .subscribe(data => {
@@ -73,7 +71,7 @@ export class LoginPage {
           var result = JSON.parse(data.text());
           if (result.result == "success") {
             this.storage.set("isLoggedIn", true);
-            this.storage.set("device_id", this.device_id);
+            this.storage.set("device_id", result.device_id);
             this.storage.set("token", result.generated_token);
             this.navCtrl.setRoot(HomePage);
           } else {

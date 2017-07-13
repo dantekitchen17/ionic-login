@@ -1,8 +1,8 @@
 import { Component, ViewChild, Renderer2 } from '@angular/core';
 import { IonicPage, NavController, NavParams, MenuController, Platform, LoadingController } from 'ionic-angular';
-import { Http, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import { Storage } from '@ionic/storage';
 import { ShipmentServiceProvider } from '../../providers/shipment-service/shipment-service';
+import { CommonServiceProvider } from '../../providers/common-service/common-service';
 
 declare var google;
 /**
@@ -17,8 +17,9 @@ declare var google;
   templateUrl: 'detail.html',
 })
 export class DetailPage {
+  @ViewChild("content") content;
   @ViewChild("slider") slider;
-
+  
   callback: any;
   loader: any;
   loaded: boolean = false;
@@ -52,6 +53,7 @@ export class DetailPage {
   nama: string;
   keterangan: string;
   status_text: string;
+  status_text_next: string;
 
   currentLocation: any = null;
   map: any;
@@ -64,7 +66,7 @@ export class DetailPage {
   location_to_lng: any;
   center_from: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public shipmentService: ShipmentServiceProvider, public menu: MenuController, public renderer2: Renderer2, public http: Http, public storage: Storage, public platform: Platform, public loading: LoadingController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public shipmentService: ShipmentServiceProvider, public menu: MenuController, public renderer2: Renderer2, public storage: Storage, public platform: Platform, public loading: LoadingController, public commonService: CommonServiceProvider) {
 
     this.items = [];
     this.menu.swipeEnable(false);
@@ -88,6 +90,8 @@ export class DetailPage {
       lokasi_tujuan: item.location_to_address
     };
 
+    this.status_text_next = this.detail.status_array[(parseInt(this.detail.status + "") + 1).toString()];
+
     this.location_from_lat = item.location_from_lat;
     this.location_from_lng = item.location_from_lng;
     this.location_to_lat = item.location_to_lat;
@@ -98,15 +102,11 @@ export class DetailPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad DetailPage');
-    this.loadMap();
-    this.disableMapTouchMove();
-
-    this.storage.get("location").then((value) => {
-      this.currentLocation = value;
-    });
   }
 
   ngAfterViewInit() {
+    this.getMyLocationAndSetMap();
+
     var nativeElement = this.slider.nativeElement;
     this.renderer2.listen(nativeElement, "touchend", (evt) => {
       if (nativeElement.value == nativeElement.max) {
@@ -117,20 +117,19 @@ export class DetailPage {
     });
   }
 
+  getMyLocationAndSetMap() {
+    this.storage.get("location").then((value) => {
+      this.currentLocation = value;
+      this.loadMap();
+      this.disableMapTouchMove();
+    });
+  }
+
   submit() {
     this.loader = this.loading.create({
       content: "submitting data..."
     });
     this.loader.present();
-
-    let headers = new Headers();
-    headers.append("Content-Type", "application/x-www-form-urlencoded");
-    let options = new RequestOptions({headers: headers});
-    
-    let urlSearchParams = new URLSearchParams();
-    urlSearchParams.append("shipment_id", this.id + "");
-    urlSearchParams.append("device_id", this.device_id + "");
-    let body = urlSearchParams.toString();
 
     var url = "";
     if (this.detail.status == 2) {
@@ -141,11 +140,23 @@ export class DetailPage {
       url = "https://dantekitchen17.000webhostapp.com/api/submit-terima";
     }
     
-    this.http.post(url, body, options)
-      .subscribe(data => {
-        this.loader.dismiss();
+    this.shipmentService.updateShipmentStatus(url, this.id).then((result) => {
+      this.loader.dismiss();
+      this.slider.nativeElement.value = 0;
+      if (result.status == "success") {
         this.callback(true);
-        this.navCtrl.pop();
+        this.detail.status = result.data[0].shipment_status;
+        this.detail.status_text = this.detail.status_array[this.detail.status + ""];
+        this.detail.additional_class = "badge-status-" + this.detail.status_text;
+        this.status_text_next = this.detail.status_array[(parseInt(this.detail.status + "") + 1).toString()];
+        this.getMyLocationAndSetMap();
+        this.content.scrollToTop();
+        this.commonService.presentToast("Sukses update status");
+      } else if (result.status == "device_not_found") {
+        this.commonService.presentToast("error");
+      } else {
+        this.commonService.presentToast(result.errorName + ": " + result.errorMessage);
+      }
     });
   }
 
@@ -173,7 +184,7 @@ export class DetailPage {
 
           this.loaded = true;
         } else {
-
+          
         }
       });
   }
@@ -201,7 +212,6 @@ export class DetailPage {
       gestureHandling: "none"
     });
 
-
     /*if (this.currentLocation != null) {
       let position = {lat: this.currentLocation.lat, lng: this.currentLocation.lng};
       var marker = new google.maps.Marker({
@@ -210,7 +220,7 @@ export class DetailPage {
         animation: google.maps.animation.DROP
       });
     }*/
-
+    
     var directionsService = new google.maps.DirectionsService;
     var directionsDisplay = new google.maps.DirectionsRenderer;
     directionsDisplay.setMap(this.map);
@@ -218,9 +228,19 @@ export class DetailPage {
   }
 
   calculateAndDisplayRoute(directionsService, directionsDisplay) {
+    var from_lat, from_lng, to_lat, to_lng;
+    from_lat = this.currentLocation.lat;
+    from_lng = this.currentLocation.lng;
+    if (this.detail.status == 2) {
+      to_lat = this.location_from_lat;
+      to_lng = this.location_from_lng;
+    } else {
+      to_lat = this.location_to_lat;
+      to_lng = this.location_to_lng;
+    }
     directionsService.route({
-      origin: new google.maps.LatLng(this.location_from_lat, this.location_from_lat),
-      destination: new google.maps.LatLng(this.location_to_lat, this.location_to_lng),
+      origin: new google.maps.LatLng(from_lat, from_lng),
+      destination: new google.maps.LatLng(to_lat, to_lng),
       travelMode: "DRIVING"
     }, function(response, status) {
       if (status === "OK") {

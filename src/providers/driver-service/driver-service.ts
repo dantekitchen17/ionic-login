@@ -24,20 +24,26 @@ export class DriverServiceProvider {
     this.token = null;
   }
 
-  load(reload = false) {
-    if (this.token != null) {
-      return this.doLoad(reload);
-    } else {
-      Promise.all([
-        this.storage.get("device_id"),
-        this.storage.get("token")
-      ]).then((value) => {
-        this.id = value[0];
-        this.token = value[1];
-        alert(this.token);
-        return this.doLoad(reload);
-      });
-    }
+  load(reload = false):any {
+    return new Promise((resolve, reject) => {
+      if (this.token != null) {
+        this.doLoad(reload).then((value) => {
+          resolve(value);
+        });
+      } else {
+        Promise.all([
+          this.storage.get("device_id"),
+          this.storage.get("token")
+        ]).then((value) => {
+          this.id = value[0];
+          this.token = value[1];
+          this.doLoad(reload).then((value) => {
+            resolve(value);
+          });
+        });
+      }
+    });
+    
   }
 
   doLoad(reload) {
@@ -61,6 +67,9 @@ export class DriverServiceProvider {
           if (data.status == 200) {
             var result = JSON.parse(data.text());
             this.data.status = "success";
+            if (result.length > 0) {
+              this.data.status = result[0].result;
+            }
             this.data.data = result;
             resolve(this.data);
           } else {

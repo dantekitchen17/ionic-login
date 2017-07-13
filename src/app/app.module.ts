@@ -23,6 +23,7 @@ import { Toast } from '@ionic-native/toast';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { AppMinimize } from '@ionic-native/app-minimize';
 import { Dialogs } from '@ionic-native/dialogs';
+import { CommonServiceProvider } from '../providers/common-service/common-service';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { Dialogs } from '@ionic-native/dialogs';
     Toast,
     BackgroundMode,
     AppMinimize,
-    Dialogs
+    Dialogs,
+    CommonServiceProvider
   ]
 })
 export class AppModule {}

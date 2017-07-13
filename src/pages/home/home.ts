@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, MenuController, PopoverController, LoadingController, Platform, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, MenuController, PopoverController, LoadingController, Platform } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { DetailPage } from '../detail/detail';
 import { PopoverPage } from '../popover/popover';
 import { DriverServiceProvider } from '../../providers/driver-service/driver-service';
 import { LocationTrackerProvider } from '../../providers/location-tracker/location-tracker';
+import { CommonServiceProvider } from '../../providers/common-service/common-service';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { AppMinimize } from '@ionic-native/app-minimize';
+import { Dialogs } from '@ionic-native/dialogs';
 
 /**
  * Generated class for the HomePage page.
@@ -54,7 +56,7 @@ export class HomePage {
 
   refreshAfterBack: boolean = false;
 
-  constructor(public navCtrl: NavController, public menu: MenuController, public navParams: NavParams, public popoverCtrl: PopoverController, public driverService: DriverServiceProvider, public loading: LoadingController, public storage: Storage, public locationTracker: LocationTrackerProvider, public backgroundMode: BackgroundMode, public appMinimize: AppMinimize, private platform: Platform, public toast: ToastController) {
+  constructor(public navCtrl: NavController, public menu: MenuController, public navParams: NavParams, public popoverCtrl: PopoverController, public driverService: DriverServiceProvider, public loading: LoadingController, public storage: Storage, public locationTracker: LocationTrackerProvider, public backgroundMode: BackgroundMode, public appMinimize: AppMinimize, private platform: Platform, public commonService: CommonServiceProvider, public dialogs: Dialogs) {
     this.menu.enable(true);
     
     this.platform.registerBackButtonAction(() => {
@@ -122,14 +124,6 @@ export class HomePage {
     this.locationTracker.stopTracking();
   }
 
-  presentToast(message) {
-    let toast = this.toast.create({
-      message: message,
-      duration: 5000
-    });
-    toast.present();
-  }
-
   presentPopover(ev) {
     let popover = this.popoverCtrl.create(PopoverPage);
     popover.present({
@@ -151,8 +145,7 @@ export class HomePage {
         if (result.status == "success") {
           this.errorState = false;
           var iLength = result.data.length;
-          var str = JSON.stringify(result.data);
-          alert(str);
+
           for (var i = 0; i < iLength; i++) {
             var item = result.data[i];
             this.items = [
@@ -178,9 +171,11 @@ export class HomePage {
             ];
           }
 
+        } else if (result.status == "device_not_found") {
+          this.commonService.logout();
         } else {
           this.errorState = true;
-          this.presentToast(result.errorName + ": " + result.errorMessage);
+          this.commonService.presentToast(result.errorName + ": " + result.errorMessage);
         }
 
         if (this.items.length == 0) {
@@ -196,9 +191,17 @@ export class HomePage {
   }
 
   itemClick(event, item) {
-    this.navCtrl.push(DetailPage, {
-      item: item,
-      callback: this.callbackFunction
+    this.dialogs.prompt("Masukkan nama anda : ", "Nama Supir", ["OK", "Batal"], "").then((results) => {
+      if (results.buttonIndex == 1) {
+        if (this.items[0].driver_name.toLowerCase() == results.input1.toLowerCase()) {
+          this.navCtrl.push(DetailPage, {
+            item: item,
+            callback: this.callbackFunction
+          });
+        } else {
+          this.dialogs.alert(results.input1 + " bukan supir untuk pengiriman ini", "");
+        }
+      }
     });
   }
 
