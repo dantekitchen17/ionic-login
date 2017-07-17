@@ -61,7 +61,7 @@ export class DriverServiceProvider {
       let urlSearchParams = new URLSearchParams();
       urlSearchParams.append("token", this.token);
       let body = urlSearchParams.toString();
-      this.http.post('https://dantekitchen17.000webhostapp.com/api/device/' + this.id, body, options)
+      this.http.post('http://yukirim.wahanafurniture.com/api/device/' + this.id, body, options)
         .timeout(10000)
         .subscribe(data => {
           if (data.status == 200) {

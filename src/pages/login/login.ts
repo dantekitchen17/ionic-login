@@ -4,6 +4,7 @@ import { Http, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import { Device } from '@ionic-native/device';
 import { Storage } from '@ionic/storage';
 import { HomePage } from '../home/home';
+import { CommonServiceProvider } from '../../providers/common-service/common-service';
 
 /**
  * Generated class for the LoginPage page.
@@ -22,7 +23,7 @@ export class LoginPage {
   password: string;
   toast: any;
 
-  constructor(public navCtrl: NavController, public menu: MenuController, public navParams: NavParams, public storage: Storage, private device: Device, public platform: Platform, public http: Http, public loading: LoadingController, private toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, public menu: MenuController, public navParams: NavParams, public storage: Storage, private device: Device, public platform: Platform, public http: Http, public loading: LoadingController, private toastCtrl: ToastController, public commonService: CommonServiceProvider) {
     this.menu.enable(false);
     this.platform.registerBackButtonAction(() => {
       this.platform.exitApp();
@@ -33,10 +34,15 @@ export class LoginPage {
         this.navCtrl.setRoot(HomePage);
       }
     });
+
+    this.platform.ready().then(() => {
+      this.commonService.getItemFromStorage("message");
+    });
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
+    
   }
 
   presentToast(text) {
@@ -65,7 +71,8 @@ export class LoginPage {
     urlSearchParams.append("email", this.email);
     urlSearchParams.append("password", this.password);
     let body = urlSearchParams.toString();
-    this.http.post("https://dantekitchen17.000webhostapp.com/api/login", body, options)
+    this.http.post("http://yukirim.wahanafurniture.com/api/login", body, options)
+      .timeout(10000)
       .subscribe(data => {
         if (data.status == 200) {
           var result = JSON.parse(data.text());
@@ -75,7 +82,7 @@ export class LoginPage {
             this.storage.set("token", result.generated_token);
             this.navCtrl.setRoot(HomePage);
           } else {
-            this.presentToast("Email / Password / Device ID salah");
+            this.presentToast("Email / Password salah");
           }
         } else {
           this.presentToast("Tidak bisa terhubung dengan server");

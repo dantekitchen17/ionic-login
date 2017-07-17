@@ -133,11 +133,11 @@ export class DetailPage {
 
     var url = "";
     if (this.detail.status == 2) {
-      url = "https://dantekitchen17.000webhostapp.com/api/submit-kirim";
+      url = "http://yukirim.wahanafurniture.com/api/submit-kirim";
     } else if (this.detail.status == 3) {
-      url = "https://dantekitchen17.000webhostapp.com/api/submit-ambil";
+      url = "http://yukirim.wahanafurniture.com/api/submit-ambil";
     } else if (this.detail.status == 4) {
-      url = "https://dantekitchen17.000webhostapp.com/api/submit-terima";
+      url = "http://yukirim.wahanafurniture.com/api/submit-terima";
     }
     
     this.shipmentService.updateShipmentStatus(url, this.id).then((result) => {

@@ -24,6 +24,7 @@ import { BackgroundMode } from '@ionic-native/background-mode';
 import { AppMinimize } from '@ionic-native/app-minimize';
 import { Dialogs } from '@ionic-native/dialogs';
 import { CommonServiceProvider } from '../providers/common-service/common-service';
+import { NativeStorage } from '@ionic-native/native-storage';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { CommonServiceProvider } from '../providers/common-service/common-servic
     BackgroundMode,
     AppMinimize,
     Dialogs,
-    CommonServiceProvider
+    CommonServiceProvider,
+    NativeStorage
   ]
 })
 export class AppModule {}

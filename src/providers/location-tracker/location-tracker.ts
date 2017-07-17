@@ -55,7 +55,7 @@ export class LocationTrackerProvider {
       urlSearchParams.append("lng", location.longitude + "");
       urlSearchParams.append("accuracy", location.accuracy + "");
       let body = urlSearchParams.toString();
-      this.http.post("https://dantekitchen17.000webhostapp.com/api/post-coordinate", body, options)
+      this.http.post("http://yukirim.wahanafurniture.com/api/post-coordinate", body, options)
         .subscribe(data => {
           
       });

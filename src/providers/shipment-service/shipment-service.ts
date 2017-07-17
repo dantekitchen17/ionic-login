@@ -59,7 +59,7 @@ export class ShipmentServiceProvider {
       urlSearchParams.append("token", this.token);
       urlSearchParams.append("device_id", this.device_id + "");
       let body = urlSearchParams.toString();
-      this.http.post('https://dantekitchen17.000webhostapp.com/api/device/shipment/' + id, body, options)
+      this.http.post('http://yukirim.wahanafurniture.com/api/device/shipment/' + id, body, options)
         .timeout(10000)
         .subscribe(data => {
           if (data.status == 200) {
